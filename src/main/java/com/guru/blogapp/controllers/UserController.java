@@ -29,8 +29,8 @@ public class UserController {
     private UserService userService;
 
     // POST - create user
-    @PostMapping("/")
     // http://localhost:8080/api/users/
+    @PostMapping("/")
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
         UserDto createdUserDto = userService.createUser(userDto);
         return new ResponseEntity<>(createdUserDto, HttpStatus.CREATED);

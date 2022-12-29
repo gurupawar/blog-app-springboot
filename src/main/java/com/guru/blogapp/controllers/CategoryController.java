@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern.Flag;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,12 +28,16 @@ public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
+    // Create Category
+    // http://localhost:8080/api/category/
     @PostMapping("/")
     public ResponseEntity<CategoryDto> addCategory(@Valid @RequestBody CategoryDto categoryDto) {
         CategoryDto createCate = this.categoryService.createCategory(categoryDto);
         return new ResponseEntity<CategoryDto>(createCate, HttpStatus.CREATED);
     }
 
+    // Update Category by id
+    // http://localhost:8080/api/category/3
     @PutMapping("/{categoryId}")
     public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto,
             @PathVariable Long categoryId) {
@@ -43,6 +46,8 @@ public class CategoryController {
         return new ResponseEntity<CategoryDto>(updatedCate, HttpStatus.CREATED);
     }
 
+    // Delete category by id
+    // http://localhost:8080/api/category/3
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<?> deleteCategory(@PathVariable Long categoryId) {
         categoryService.deleteCategory(categoryId);
@@ -50,12 +55,16 @@ public class CategoryController {
                 HttpStatus.OK);
     }
 
+    // Get category by id
+    // http://localhost:8080/api/category/3
     @GetMapping("/{categoryId}")
     public ResponseEntity<CategoryDto> getCategory(@PathVariable Long categoryId) {
         CategoryDto cat = categoryService.getCategory(categoryId);
         return new ResponseEntity<CategoryDto>(cat, HttpStatus.OK);
     }
 
+    // Get all categories
+    // http://localhost:8080/api/category/
     @GetMapping("/")
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
         List<CategoryDto> catList = categoryService.getCategories();
