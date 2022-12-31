@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.guru.blogapp.entities.Post;
 import com.guru.blogapp.payloads.PostDto;
+import com.guru.blogapp.payloads.PostResponse;
 
 public interface PostService {
 
@@ -13,7 +14,7 @@ public interface PostService {
 
     void deletePost(Long postId);
 
-    List<PostDto> getAllPost();
+    PostResponse getAllPost(Long pageNumber, Long pageSize);
 
     PostDto getPostById(Long postId);
 

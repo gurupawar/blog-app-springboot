@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.guru.blogapp.entities.Post;
 import com.guru.blogapp.payloads.ApiResponse;
 import com.guru.blogapp.payloads.PostDto;
+import com.guru.blogapp.payloads.PostResponse;
 import com.guru.blogapp.services.PostService;
 
 @RestController
@@ -66,11 +67,15 @@ public class PostController {
     }
 
     // Get all post
-    // http://localhost:8080/api/posts
+    // http://localhost:8080/api/posts - will get default pageNumber and PageSize
+    // http://localhost:8080/api/posts?pageNumber=0&pageSize=3 - pageNumber start
+    // with 0
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts() {
-        List<PostDto> allpost = postService.getAllPost();
-        return new ResponseEntity<List<PostDto>>(allpost, HttpStatus.OK);
+    public ResponseEntity<PostResponse> getAllPosts(
+            @RequestParam(value = "pageNumber", defaultValue = "0") Long pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10") Long pageSize) {
+        PostResponse postResponse = postService.getAllPost(pageNumber, pageSize);
+        return new ResponseEntity<PostResponse>(postResponse, HttpStatus.OK);
     }
 
     // Get Post by id

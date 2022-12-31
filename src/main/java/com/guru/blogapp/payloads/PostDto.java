@@ -13,6 +13,7 @@ import lombok.ToString;
 @ToString
 public class PostDto {
 
+    private Long postId;
     private String title;
     private String content;
     private String imageName;

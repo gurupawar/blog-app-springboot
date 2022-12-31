@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.guru.blogapp.entities.Category;
@@ -13,6 +16,7 @@ import com.guru.blogapp.entities.Post;
 import com.guru.blogapp.entities.User;
 import com.guru.blogapp.exceptions.ResourceNotFoundException;
 import com.guru.blogapp.payloads.PostDto;
+import com.guru.blogapp.payloads.PostResponse;
 import com.guru.blogapp.repositories.CategoryRepository;
 import com.guru.blogapp.repositories.PostRepository;
 import com.guru.blogapp.repositories.UserRepository;
@@ -73,11 +77,24 @@ public class PostServiceImpl implements PostService {
         }
 
         @Override
-        public List<PostDto> getAllPost() {
-                List<Post> postss = postRepository.findAll();
+        public PostResponse getAllPost(Long pageNumber, Long pageSize) {
+                int pageNum = Math.toIntExact(pageNumber);
+                int pageSz = Math.toIntExact(pageSize);
+
+                Pageable p = PageRequest.of(pageNum, pageSz);
+                Page<Post> pagePost = postRepository.findAll(p);
+                List<Post> postss = pagePost.getContent();
+
                 List<PostDto> pstDto = postss.stream().map(post -> this.modelMapper.map(post, PostDto.class))
                                 .collect(Collectors.toList());
-                return pstDto;
+                PostResponse postResponse = new PostResponse();
+                postResponse.setPageNumber(pagePost.getNumber());
+                postResponse.setPageSize(pagePost.getSize());
+                postResponse.setTotalElements(pagePost.getTotalElements());
+                postResponse.setTotalPages(pagePost.getTotalPages());
+                postResponse.setLastPage(pagePost.isLast());
+                postResponse.setContent(pstDto);
+                return postResponse;
         }
 
         @Override
